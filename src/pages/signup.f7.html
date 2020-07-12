@@ -1,0 +1,247 @@
+<template>
+  <div class="page" data-name="signup">
+    <div id="back-icon">
+      <div class="left">
+        <a href="#" class="link back">
+          <div class="icon icon-back" style="color:#ffdb5d"></div>
+          <span class="if-not-md">Back</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lo1"><img src="static/lo1.png"></div>
+
+
+    <div data-pagination='{"el": ".swiper-pagination"}' data-space-between="50"
+      class="swiper-container swiper-init demo-swiper">
+
+      <div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+
+          <!--join-form-->
+          <form class="list no-hairlines-md join-form">
+            <ul style="margin:20px; padding:20px; border-radius:30px; border:solid 1px #ffdb5d">
+              <div class="title" style="margin-bottom:20px; width:80px; margin:0 auto; color:#373637;">사용자정보</div>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">이름</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" placeholder="이름" name="name" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">전화번호</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" placeholder="전화번호" name="tel" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">이메일</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="email" placeholder="이메일" name="email" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">비밀번호</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="password" name="password" placeholder="비밀번호" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">비밀번호 확인</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="password" name="password_again" placeholder="비밀번호확인" required />
+
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </form>
+
+
+        </div>
+        <div class="swiper-slide">
+
+          <!--join-form2-->
+          <form class="list no-hairlines-md join-form2">
+            <ul style="margin:20px; padding-top:15px; padding:20px; border-radius:30px; border:solid 1px #ffdb5d">
+              <div class="title" style="margin-bottom:20px; width:280px; text-align:center; color:#373637;">반려동물정보</div>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">반려동물이름</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" name="pet_name" placeholder="반려동물이름" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">반려동물생일</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" name="pet_birth" placeholder="년/월/일 순으로 기입해주세요" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">반려동물성별</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" name="pet_gender" placeholder="남/여" required />
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label color-yellow">반려동물의 종</div>
+                    <div class="item-input-wrap color-yellow">
+                      <input type="text" name="pet_species" placeholder="반려동물의 종" required />
+
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </form>
+          <div class="block">
+            <a @click="join" class="button button-fill button-medium"
+              style="margin-left:10px; margin-right:10px; line-height:42px; height:42px;background-color:#ffdb5d; border-radius:40px;">회원가입</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    methods: {
+      join: function () {
+        var self = this;
+        var app = self.$app;
+        var formData = app.form.convertToData('.join-form');
+        var formData2 = app.form.convertToData('.join-form2');
+
+        //formData
+        if (!formData.name) {
+          app.dialog.alert('이름을 입력해주세요.', '아이멍케어');
+        } else if (!formData.tel) {
+          app.dialog.alert('전화번호를 입력해주세요.', '아이멍케어');
+        } else if (!formData.email) {
+          app.dialog.alert('이메일을 입력해주세요.', '아이멍케어');
+        } else if (!formData.password) {
+          app.dialog.alert('비밀번호를 입력해주세요.', '아이멍케어');
+        } else if (!formData.password_again) {
+          app.dialog.alert('비밀번호 확인을 입력해주세요.', '아이멍케어');
+        } else if (formData.password != formData.password_again) {
+          app.dialog.alert(
+            '비밀번호와 비밀번호 확인이 다릅니다.',
+            '아이멍케어',
+          );
+        //formData2
+        } else if (!formData2.pet_name) {
+          app.dialog.alert('반려동물의 이름을 입력해주세요.', '아이멍케어');
+        } else if (!formData2.pet_birth) {
+          app.dialog.alert('반려동물의 생일을 입력해주세요.', '아이멍케어');
+        } else if (!formData2.pet_gender) {
+          app.dialog.alert('반려동물의 성별을 입력해주세요.', '아이멍케어');
+        } else if (!formData2.pet_species) {
+          app.dialog.alert('반려동물의 종을 입력해주세요.', '아이멍케어');
+        } else {
+          app.dialog.preloader();
+
+          firebase
+            .auth()
+            .createUserWithEmailAndPassword(formData.email, formData.password)
+            .then(function (res) {
+              console.log(res);
+
+              db.collection('users')
+                .doc(res.user.uid)
+                .set({
+                  //formData
+                  name: formData.name,
+                  tel: formData.tel,
+                  
+                  pet_name: formData2.pet_name,
+                  pet_birth: formData2.pet_birth,
+                  pet_species: formData2.pet_species,
+                  pet_gender: formData2.pet_gender,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+                .then(function () {
+                  app.dialog.alert('사용자를 등록하였습니다.', '아이멍케어');
+                  app.views.main.router.navigate('/map/', {
+                    reloadCurrent: true,
+                    ignoreCache: true,
+                  });
+                })
+                .catch(function (error) {
+                  console.error(error);
+                });
+            })
+            .catch(function (error) {
+              console.log(error);
+              if (error.code == 'auth/invalid-email') {
+                app.dialog.alert(
+                  '올바른 형식의 이메일을 입력해주세요.',
+                  '아이멍케어',
+                );
+              } else if (error.code == 'auth/weak-password') {
+                app.dialog.alert(
+                  '6자리 이상의 비밀번호를 입력해주세요.',
+                  '아이멍케어',
+                );
+              } else if (error.code == 'auth/email-already-in-use') {
+                app.dialog.alert('이미 등록된 이메일입니다.', '아이멍케어');
+              }
+            })
+            .finally(function () {
+              app.dialog.close();
+            });
+        }
+      },
+    },
+    on: {
+      pageInit: function (e, page) {
+        var self = this;
+        var app = self.$app;
+
+        // 사용자 정보
+        if (firebase.auth().currentUser) {
+          app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true,
+          });
+        }
+      },
+    },
+  };
+</script>

@@ -1,0 +1,100 @@
+<template>
+  <div class="page" data-name="login" style="background-image:url(static/dogbg.jpg); background-repeat:no-repeat; background-size: cover;">
+
+    <div id="back-icon">
+      <div class="left">
+        <a href="#" class="link back">
+          <div class="icon icon-back" style="color:#ffdb5d"></div>
+          <span class="if-not-md">Back</span>
+        </a>
+      </div>
+    </div>
+
+
+   
+    <div class="firstimg2">
+      <div class="text-logo"> <img src="static/lo2.png" /></div>  
+    </div>      
+
+    <div class="listbg2">
+      <form class="list login-form">
+ 
+          <div class="item-content">
+              <div class="item-inner">
+                  
+                <div class="item-input-wrap color-white" style=" background:rgba(0,0,0,0.4)">
+                  <input type="email" name="email" placeholder="이메일을 입력하세요" style="color:#ffffff; padding-left:30px;" />
+                </div>
+              </div>
+          </div>
+
+          <div class="item-content">
+              <div class="item-inner">
+               
+                <div class="item-input-wrap" style="background-color:#ffdb5d">
+                  <input type="password" name="password" placeholder="비밀번호를 입력하세요" style="padding-left:30px;" />
+                
+              </div>
+            </div>
+           </div>
+          
+        
+      </form>
+    </div>
+    <div class="divlog-butt" a @click="login"class="item-title" href="#">로그인</a></div>
+ </div>
+</template>
+
+<script>
+  export default {
+    methods: {
+      login: function () {
+        var self = this;
+        var app = self.$app;
+        var formData = app.form.convertToData('.login-form');
+        
+        if (!formData.email) {
+          app.dialog.alert('이메일을 입력해주세요.', '아이멍케어');
+        } else if (!formData.password) {
+          app.dialog.alert('비밀번호를 입력해주세요', '아이멍케어');
+        } else {
+          app.dialog.preloader();
+
+          firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
+            .then(function (res) {
+              console.log(res);
+              var user = res.user;
+              app.views.main.router.navigate('/map/', {
+                reloadCurrent: true,
+                ignoreCache: true,
+              });
+              app.dialog.alert('로그인 되었습니다.','아이멍케어');
+            }).catch(function (error) {
+              console.log(error);
+              if (error.code == 'auth/wrong-password') {
+                app.dialog.alert('비밀번호를 다시 확인하세요.', '아이멍케어');
+              }else if (error.code == 'auth/user-not-found') {
+                app.dialog.alert('등록되지 않은 이메일입니다.', '아이멍케어');
+              }
+            }).finally(function () {
+              app.dialog.close();
+            });
+        }
+      },
+    },
+    on: {
+      pageInit: function (e, page) {
+        var self = this;
+        var app = self.$app;
+
+        // 사용자 정보
+        if (firebase.auth().currentUser) {
+          app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true,
+          });
+        }
+      },
+    },
+  };
+</script>

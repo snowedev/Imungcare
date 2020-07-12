@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!--
+  Customize this policy to fit your own app's needs. For more guidance, see:
+      https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+  Some notes:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+      * Enable inline JS: add 'unsafe-inline' to default-src
+  -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover"
+    />
+
+    <meta name="theme-color" content="#007aff" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>imungcare</title>
+
+    <!-- built styles file will be auto injected -->
+  </head>
+
+  <body>
+    <!------------------------------------------->
+    <div id="app">
+      <!-- Status bar overlay for fullscreen mode-->
+      <div class="statusbar"></div>
+      <!-- Left panel with cover effect -->
+      <div class="panel panel-left panel-cover" data-visible-breakpoint="960">
+        <div class="view view-init" data-view="left">
+          <div class="page">
+            <div class="page-content panel-custom">
+              <div class="list">
+                <a href="#" class="link icon-only panel-close">
+                  <span
+                    class="icon material-icons if-md"
+                    style="position: absolute;z-index:10; color:#ffffff; margin-left:230px; margin-top:-21px;"
+                  >
+                    menu
+                  </span></a
+                >
+                <ul>
+                  <li class="li-profile panel-custom2" style="display: none;">
+                    <a
+                      href="/map/"
+                      data-view=".view-main"
+                      class="item-content item-link panel-close"
+                    >
+                      <div class="item-inner panel-custom2">
+                        <div class="item-title">
+                          <img
+                            src="static/home.png"
+                            style="margin-right:15px;"
+                          />홈
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+
+                  <li class="li-profile panel-custom2" style="display: none;">
+                    <a
+                      href="/profile/"
+                      data-view=".view-main"
+                      class="item-content item-link panel-close"
+                    >
+                      <div class="item-inner panel-custom2">
+                        <div class="item-title">
+                          <img
+                            src="static/user.png"
+                            style="margin-right:15px;"
+                          />내 정보
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="li-logout panel-custom2" style="display: none;">
+                    <a
+                      href="#"
+                      class="item-content item-link panel-close logout"
+                    >
+                      <div class="item-inner panel-custom2">
+                        <div class="item-title">
+                          <img
+                            src="static/exit.png"
+                            style="margin-right:15px;"
+                          />로그아웃
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+      <div
+        id="view-home"
+        class="view view-main view-init tab tab-active"
+        data-url="/"
+      ></div>
+    </div>
+
+    <!--Firebase SDK-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+   https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-analytics.js"></script>
+    <!-- 인증 -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    <!-- Cloud Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: 'AIzaSyAt3FVrXksxeWYS-DkBjinsBrq8_txcET4',
+        authDomain: 'imungcare.firebaseapp.com',
+        databaseURL: 'https://imungcare.firebaseio.com',
+        projectId: 'imungcare',
+        storageBucket: 'imungcare.appspot.com',
+        messagingSenderId: '325026621189',
+        appId: '1:325026621189:web:460ec19b081101fbfd396c',
+        measurementId: 'G-PC8THSD4N7',
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+
+      //-----------------------------------------11/08
+      firebase.auth().languageCode = 'ko';
+      var db = firebase.firestore();
+    </script>
+    <!--Google map API+place libraries -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBX9JCLdsSPrVccZVT0xLK13BqSNHc01jU&libraries=places"
+      async
+      defer
+    ></script>
+    <% if (process.env.TARGET === 'cordova') { %>
+    <script src="cordova.js"></script>
+    <% } %>
+    <!-- built script files will be auto injected -->
+  </body>
+</html>

@@ -1,0 +1,25 @@
+#back-icon {
+
+    height: 20px;
+    line-height: 50px;
+}
+
+#signupbutt {
+    color: #ffdb5d;
+    margin: 0 auto;
+}
+
+.lo1{
+    text-align:center;   
+}
+
+.swiper-pagination-bullet{
+   background-color:#ffdb5d;
+   margin-left:10px;
+   
+}
+
+.swiper-pagination{
+    width:100%;
+      
+}

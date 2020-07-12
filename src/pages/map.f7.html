@@ -1,0 +1,699 @@
+<template>
+  <div class="page" data-name="map">
+    <!-- Top Navbar -->
+    <div class="navbar no-shadow">
+      <div class="navbar-bg" style="background-color: #ffdb5d;"></div>
+      <div class="navbar-inner sliding">
+        <div class="topbar">
+          <div class="left">
+            <a href="#" class="link icon-only panel-open" data-panel="left">
+              <div class="icon material-icons if-md" style="color:#ffffff">
+                menu
+              </div>
+            </a>
+            <div class="whitelo">
+              <img src="static/white-lo.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-modal sheet-modal-top my-sheet-top">
+      <div class="sheet-modal-inner">
+        <input
+          type="text"
+          id="origin-input"
+          class="controls"
+          placeholder="출발지"
+        />
+        <input
+          id="destination-input"
+          class="controls"
+          type="text"
+          placeholder="도착지"
+        />
+
+        <div id="mode-selector" class="controls">
+          <div class="item-title" id="changemode-transit">길찾기</div>
+        </div>
+        <div id="direction-reset" class="controls" a @click="directionreset">
+          <div class="item-title">경로제거</div>
+        </div>
+      </div>
+    </div>
+    <div class="fab fab-right-top">
+      <div
+        class="button sheet-open"
+        href="#"
+        data-sheet=".my-sheet-top"
+        a
+        id="search-but"
+        @click="search"
+      >
+        <img class="search-butt" src="static/search.png" />
+      </div>
+      <div class="lost-but" a @click="lostdog">
+        <img class="lost-butt" src="static/missing.png" />
+      </div>
+      <div class="lostcancel-but" a @click="lostcanceldog">
+        <img class="lostcancel-butt" src="static/missingcancel.png" />
+      </div>
+    </div>
+    <div class="fab fab-bottom-right">
+      <div class="dog_fbb" a @click="dogswitch">
+        <img class="dog_fb" src="static/dog_mode.png" />
+      </div>
+      <div class="person_fbb" a @click="personswitch">
+        <img class="person_fb" src="static/person_mode.png" />
+      </div>
+    </div>
+
+    <div id="map"></div>
+  </div>
+</template>
+<script>
+  import $$ from 'dom7';
+  var map;
+  var loc;
+  var service;
+  var infowindow;
+  var geocoder;
+  var marker;
+  var marker_other1;
+  var marker_other2;
+  var marker_other3;
+  var marker_other4;
+  var marker_other5;
+  var marker_mydog;
+  var directionDisplay;
+  var lost_infowindow;
+
+  export default {
+    data: function() {
+      return {
+        currentUser: firebase.auth().currentUser,
+        user: null,
+      };
+    },
+    methods: {
+      //강아지 위치 화면으로 전환
+      dogswitch: function() {
+        $$('.person_fbb').show();
+        $$('.dog_fbb').hide();
+        marker_other1.setVisible(true);
+        marker_other2.setVisible(true);
+        marker_other3.setVisible(true);
+        marker_other4.setVisible(true);
+        marker_other5.setVisible(true);
+        marker_mydog.setVisible(false);
+      },
+      //사용자 위치 화면으로 전환
+      personswitch: function() {
+        $$('.person_fbb').hide();
+        $$('.dog_fbb').show();
+        marker_other1.setVisible(false);
+        marker_other2.setVisible(false);
+        marker_other3.setVisible(false);
+        marker_other4.setVisible(false);
+        marker_other5.setVisible(false);
+        marker_mydog.setVisible(true);
+      },
+      //길찾기
+      search: function() {
+        $$('.controls').show();
+        $$('.search-but').hide();
+      },
+      //경로 초기화
+      directionreset: function() {
+        directionDisplay.set('directions', null);
+      },
+      //유기견 신고
+      lostdog: function() {
+        var self = this;
+        var app = self.$app;
+
+        //DB로 정보 넘김 - '신고'
+        db.collection('lostdogs')
+          .doc(firebase.auth().currentUser.uid)
+          .set({
+            status: 'lost',
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(function() {
+            app.dialog.alert(
+              '유기견 신고 완료되었습니다.<br />긴급 연락처가 노출됩니다.',
+              '아이멍케어',
+            );
+            marker_mydog.setIcon('static/alert_mymarker.png');
+            $$('.lostcancel-but').show();
+            $$('.lost-but').hide();
+          });
+
+        var lostdogcontent;
+        db.collection('users')
+          .doc(firebase.auth().currentUser.uid)
+          .get()
+          .then(function(doc) {
+            console.log('Current data: ', doc.data());
+            lostdogcontent = doc.data();
+
+            //유기견 신고 정보 저장
+            var contentString =
+              '연락처: ' +
+              lostdogcontent.tel +
+              '<br />' +
+              '반려동물 종: ' +
+              lostdogcontent.pet_species +
+              '<br />' +
+              '반려동물 이름: ' +
+              lostdogcontent.pet_name;
+
+            //사용자 정보 노출
+            google.maps.event.addListener(marker_mydog, 'click', function() {
+              lost_infowindow = new google.maps.InfoWindow({
+                content: contentString,
+              });
+              lost_infowindow.open(map, this);
+            });
+          });
+      },
+      lostcanceldog: function() {
+        var self = this;
+        var app = self.$app;
+        marker_mydog.setIcon('static/mymarker.png');
+        $$('.lostcancel-but').hide();
+        $$('.lost-but').show();
+
+        //사용자 정보 감추기
+        if (lost_infowindow) {
+          lost_infowindow.close();
+          google.maps.event.addListener(marker_mydog, 'click', function() {
+            lost_infowindow.close();
+          });
+        }
+
+        //DB로 정보 넘김 - '찾음'
+        db.collection('lostdogs')
+          .doc(firebase.auth().currentUser.uid)
+          .update({
+            status: 'found',
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(function() {
+            app.dialog.alert(
+              '주인 곁으로 돌아와 다행입니다!<br /> 긴급 연락처는 숨겨집니다.',
+              '아이멍케어',
+            );
+          });
+      },
+    },
+    on: {
+      pageInit: function(e, page) {
+        var self = this;
+        var app = self.$app;
+
+        // 사용자 정보
+        if (!firebase.auth().currentUser) {
+          app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true,
+          });
+        } else {
+          db.collection('users')
+            .doc(firebase.auth().currentUser.uid)
+            .onSnapshot(function(doc) {
+              console.log('Current data: ', doc.data());
+              self.$setState({
+                user: doc.data(),
+              });
+            });
+        }
+
+        //초기 화면 상태
+        $$('.controls').hide();
+        $$('.cancel-but').hide();
+        $$('.lostcancel-but').hide();
+        $$('.dog_fbb').hide();
+
+        //사용자 위치좌표정보
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            console.log('latitude : ' + position.coords.latitude);
+            console.log('longitude : ' + position.coords.longitude);
+
+            //재로그인시 유기견 신고 여부 체크
+            var once;
+            var twice;
+            db.collection('lostdogs')
+              .doc(firebase.auth().currentUser.uid)
+              .get()
+              .then(function(doc) {
+                once = doc.data();
+                twice = once.status;
+                console.log(twice);
+                if (twice == 'lost') {
+                  marker_mydog.setIcon('static/alert_mymarker.png');
+                  $$('.lostcancel-but').show();
+                  $$('.lost-but').hide();
+                  var lostdogcontent;
+                  db.collection('users')
+                    .doc(firebase.auth().currentUser.uid)
+                    .get()
+                    .then(function(doc) {
+                      console.log('Current data: ', doc.data());
+                      lostdogcontent = doc.data();
+
+                      //유기견 신고 정보 저장
+                      var contentString =
+                        '연락처: ' +
+                        lostdogcontent.tel +
+                        '<br />' +
+                        '반려동물 종: ' +
+                        lostdogcontent.pet_species +
+                        '<br />' +
+                        '반려동물 이름: ' +
+                        lostdogcontent.pet_name;
+
+                      //사용자 정보 노출
+                      google.maps.event.addListener(
+                        marker_mydog,
+                        'click',
+                        function() {
+                          lost_infowindow = new google.maps.InfoWindow({
+                            content: contentString,
+                          });
+                          lost_infowindow.open(map, this);
+                        },
+                      );
+                    });
+                } else {
+                  marker_mydog.setIcon('static/mymarker.png');
+                  $$('.lostcancel-but').hide();
+                  $$('.lost-but').show();
+                }
+              });
+
+            //사용자 위치
+            loc = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            // 구글지도
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: loc,
+              zoom: 16,
+              //default controller
+              zoomControl: false,
+              mapTypeControl: false,
+              scaleControl: false,
+              streetViewControl: true,
+              rotateControl: false,
+              fullscreenControl: false,
+            });
+
+            //현 위치에 마커 표시
+            marker = new google.maps.Marker({
+              position: loc,
+              map: map,
+              animation: google.maps.Animation.BOUNCE,
+            });
+
+            //자신 위치 표시 마커 모양
+            marker.setIcon('static/personal.png');
+            marker.setMap(map);
+
+            //자신의 반려동물 위치
+            var location_mydog = {
+              lat: 37.583822,
+              lng: 126.927827,
+            };
+
+            marker_mydog = new google.maps.Marker({
+              position: location_mydog,
+              map: map,
+              animation: google.maps.Animation.DROP,
+            });
+            marker_mydog.setIcon('static/mymarker.png');
+            marker_mydog.setMap(map);
+            marker_mydog.setVisible(false);
+
+            //----------------------------------------------------
+            //다른 사용자 강아지의 위치 표시
+            var location_other1 = {
+              lat: 37.584597,
+              lng: 126.921472,
+            };
+
+            marker_other1 = new google.maps.Marker({
+              position: location_other1,
+              map: map,
+            });
+            marker_other1.setIcon('static/other_dog1.png');
+            marker_other1.setMap(map);
+
+            //2
+            var location_other2 = {
+              lat: 37.582811,
+              lng: 126.925656,
+            };
+            marker_other2 = new google.maps.Marker({
+              position: location_other2,
+              map: map,
+            });
+            marker_other2.setIcon('static/other_dog2.png');
+            marker_other2.setMap(map);
+
+            //3
+            var location_other3 = {
+              lat: 37.58681,
+              lng: 126.926609,
+            };
+            marker_other3 = new google.maps.Marker({
+              position: location_other3,
+              map: map,
+            });
+            marker_other3.setIcon('static/other_dog3.png');
+            marker_other3.setMap(map);
+
+            google.maps.event.addListener(marker_other3, 'click', function() {
+              //동물 마커 클릭시 정보 창
+              var otherdog_content =
+                '연락처: ' +
+                '01005291214' +
+                '<br />' +
+                '반려동물 종: ' +
+                '골든리트리버' +
+                '<br />' +
+                '반려동물 이름: ' +
+                '골든이';
+
+              //동물 마커 클릭시 정보 창
+              infowindow = new google.maps.InfoWindow({
+                content: otherdog_content,
+              });
+              infowindow.open(map, this);
+            });
+            //4
+            var location_other4 = {
+              lat: 37.588014,
+              lng: 126.924024,
+            };
+            marker_other4 = new google.maps.Marker({
+              position: location_other4,
+              map: map,
+            });
+            marker_other4.setIcon('static/other_dog4.png');
+            marker_other4.setMap(map);
+
+            //5
+            var location_other5 = {
+              lat: 37.582095,
+              lng: 126.922429,
+            };
+            marker_other5 = new google.maps.Marker({
+              position: location_other5,
+              map: map,
+            });
+            marker_other5.setIcon('static/other_dog5.png');
+            marker_other5.setMap(map);
+            //----------------------------------------------------
+            //클릭시 주소 표시
+            var geocoder = new google.maps.Geocoder();
+
+            google.maps.event.addListener(map, 'click', function(event) {
+              geocoder.geocode(
+                {
+                  latLng: event.latLng,
+                },
+                function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                      app.dialog.alert(
+                        results[0].formatted_address,
+                        '주소알림이',
+                      );
+                    }
+                  }
+                },
+              );
+            });
+
+            //자신 위치에 따른 반경 표시
+            var circle = new google.maps.Circle({
+              map: map,
+              radius: 500, // 10 miles in metres
+              fillColor: '#ffdb5d', //내부 색
+              strokeColor: '#ffdb5d', //테두리 색
+              strokeWeight: 20, //테두리 두께
+              strokeOpacity: 0.1,
+              clickable: false, //클릭가능
+            });
+
+            //Circle Animation
+            var direction = 1;
+            var rMin = 440,
+              rMax = 510;
+            setInterval(function() {
+              var radius = circle.getRadius();
+              if (radius > rMax || radius < rMin) {
+                direction *= -1;
+              }
+              circle.setRadius(radius + direction * 2.5);
+            }, 50);
+
+            circle.bindTo('center', marker, 'position');
+
+            //반려동물 편의시설 표시
+            var request = {
+              location: loc,
+              radius: '500',
+              keyword: '동물병원',
+            };
+
+            var request2 = {
+              location: loc,
+              radius: '500',
+              keyword: '애견용품',
+            };
+            infowindow = new google.maps.InfoWindow();
+            var service = new google.maps.places.PlacesService(map);
+            service.search(request, callback);
+            service.search(request2, callback2);
+
+            // Create the DIV to hold the control and call the CenterControl()
+            // constructor passing in this DIV.
+            //현재위치로 돌아오는 버튼
+            var centerControlDiv = document.createElement('div');
+            var centerControl = new CenterControl(centerControlDiv, map);
+
+            centerControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+              centerControlDiv,
+            );
+
+            new AutocompleteDirectionsHandler(map);
+          },
+          function(error) {
+            console.log('code : ' + error.code);
+            console.log('message : ' + error.message);
+
+            // 구글지도 - 명지전문대학
+            var map = new google.maps.Map(document.getElementById('map'), {
+              center: {
+                lat: 37.584919,
+                lng: 126.925144,
+              },
+              zoom: 18,
+            });
+          },
+        );
+      },
+    },
+  };
+  //현재 위치로 돌아오는 버튼
+  function CenterControl(controlDiv, map) {
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    //현재 위치 버튼 아이콘
+    controlUI.style.backgroundImage = "url('static/curl.png')";
+    controlUI.style.backgroundRepeat = 'no-repeat';
+    controlUI.style.width = '35px';
+    controlUI.style.height = '35px';
+    controlUI.style.margin = '10px';
+    controlUI.style.marginTop = '162px';
+    controlUI.style.marginRight = '11px';
+    controlUI.style.borderRadius = '100px';
+    controlUI.style.backgroundColor = '#ffffff';
+    controlUI.style.boxShadow = '1px 1px 5px #373637';
+    controlUI.style.backgroundPosition = 'center center';
+    controlDiv.appendChild(controlUI);
+
+    // Setup the click event listeners: simply set the map to Current loacation.
+    controlUI.addEventListener('click', function() {
+      map.setCenter(loc);
+    });
+  }
+  //Place표시 함수
+  function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var place = results[i];
+        createMarker(results[i]);
+      }
+    }
+  }
+
+  function callback2(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var place2 = results[i];
+        createMarker2(results[i]);
+      }
+    }
+  }
+  //Place에 마커 표시 함수
+  function createMarker(place) {
+    var placeLoc = place.geometry.location;
+    var marker_v = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location,
+      animation: google.maps.Animation.DROP,
+    });
+    //마커 아이콘 변경
+    marker_v.setIcon('static/vet.png');
+
+    //장소 정보 표출
+    var place_content = place.name + '&nbsp;&nbsp;' + place.rating;
+    /*+
+         '<br />' +
+         place.formatted_phone_number;*/
+
+    google.maps.event.addListener(marker_v, 'click', function() {
+      //장소 마커 클릭시 정보 창
+      infowindow = new google.maps.InfoWindow({
+        content: place_content,
+      });
+      infowindow.open(map, this);
+    });
+  }
+  //Place에 마커 표시 함수
+  function createMarker2(place2) {
+    var placeLoc2 = place2.geometry.location;
+    var marker_v2 = new google.maps.Marker({
+      map: map,
+      position: place2.geometry.location,
+      animation: google.maps.Animation.DROP,
+    });
+    //마커 아이콘 변경
+    marker_v2.setIcon('static/petshop.png');
+
+    var place2_content = place2.name + '&nbsp;&nbsp;' + place2.rating;
+    /*+
+         '<br />' +
+         place.formatted_phone_number;*/
+
+    google.maps.event.addListener(marker_v2, 'click', function() {
+      //장소 마커 클릭시 정보 창
+      infowindow = new google.maps.InfoWindow({
+        content: place2_content,
+      });
+      infowindow.open(map, this);
+    });
+  }
+
+  function AutocompleteDirectionsHandler(map) {
+    this.map = map;
+    this.originPlaceId = null;
+    this.destinationPlaceId = null;
+    this.travelMode = null;
+    directionDisplay = new google.maps.DirectionsRenderer();
+    this.directionsService = new google.maps.DirectionsService();
+    this.directionsRenderer = directionDisplay;
+    this.directionsRenderer.setMap(map);
+
+    var originInput = document.getElementById('origin-input');
+    var destinationInput = document.getElementById('destination-input');
+    var modeSelector = document.getElementById('mode-selector');
+
+    var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+    // Specify just the place data fields that you need.
+    originAutocomplete.setFields(['place_id']);
+
+    var destinationAutocomplete = new google.maps.places.Autocomplete(
+      destinationInput,
+    );
+    // Specify just the place data fields that you need.
+    destinationAutocomplete.setFields(['place_id']);
+
+    //this.setupClickListener('changemode-walking', 'WALKING');
+    this.setupClickListener('changemode-transit', 'TRANSIT');
+    //this.setupClickListener('changemode-driving', 'DRIVING');
+
+    this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+    this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+  }
+
+  // Sets a listener on a radio button to change the filter type on Places
+  // Autocomplete.
+  AutocompleteDirectionsHandler.prototype.setupClickListener = function(
+    id,
+    mode,
+  ) {
+    var naviButton = document.getElementById(id);
+    var me = this;
+
+    naviButton.addEventListener('click', function() {
+      me.travelMode = mode;
+      me.route();
+    });
+  };
+
+  AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
+    autocomplete,
+    mode,
+  ) {
+    var me = this;
+    autocomplete.bindTo('bounds', this.map);
+
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+
+      if (!place.place_id) {
+        window.alert('Please select an option from the dropdown list.');
+        return;
+      }
+      if (mode === 'ORIG') {
+        me.originPlaceId = place.place_id;
+      } else {
+        me.destinationPlaceId = place.place_id;
+      }
+      me.route();
+    });
+  };
+
+  AutocompleteDirectionsHandler.prototype.route = function() {
+    if (!this.originPlaceId || !this.destinationPlaceId) {
+      return;
+    }
+    var me = this;
+
+    this.directionsService.route(
+      {
+        origin: {
+          placeId: this.originPlaceId,
+        },
+        destination: {
+          placeId: this.destinationPlaceId,
+        },
+        travelMode: this.travelMode,
+      },
+      function(response, status) {
+        if (status === 'OK') {
+          me.directionsRenderer.setDirections(response);
+        } else {
+          window.alert('현 국가에서는 지원하지 않습니다' + status);
+        }
+      },
+    );
+  };
+</script>

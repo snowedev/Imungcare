@@ -1,0 +1,78 @@
+* {
+    list-style: none;
+}
+
+.firstimg {
+    width: 235px;
+    height: 225px;
+    margin: 0 auto;
+    margin-top: 138px;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 72px;
+    height: 90px;
+    margin: 0 auto;
+}
+
+.logo img {
+    width: 72px;
+    height: 105px;
+}
+
+.text-logo {
+    margin-left: 21px;
+    margin-top: 10px;
+}
+
+.text-logo img {
+    width: 194px;
+    height: 84px;
+}
+
+.listbg {
+    height: 150px;
+    margin-top: -20px;
+}
+
+#login-butt {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 30px;
+    margin-bottom: 5px;
+    height: 40px;
+    margin-left: -40px;
+    margin-bottom: 7px;
+}
+
+.li-login a {
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}
+
+#signup-butt {
+    background-color: #ffdb5d;
+    border-radius: 30px;
+    height: 40px;
+    margin-left: -40px;
+}
+
+.li-join a {
+    color: #373637;
+    line-height: 40px;
+    text-align: center;
+}
+
+#idpass-butt {
+    height: 40px;
+    margin-left: -40px;
+    margin-top: 10px;
+}
+
+.li-idpass a {
+    font-size: 11px;
+    text-align: center;
+    line-height: 40px;
+    color: #ffffff;
+}

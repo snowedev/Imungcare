@@ -1,0 +1,170 @@
+/* Set the size of the div element that contains the map */
+#map {
+    height: 100%;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+}
+
+.whitelo {
+    margin-left: 50px;
+    margin-top: 6px;
+}
+
+.controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#origin-input {
+
+    background-color: #ffffff;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 30px;
+    padding: 0 11px 0 13px;
+    width: 340px;
+}
+
+#destination-input {
+
+    background-color: #ffffff;
+    padding: 0 11px 0 13px;
+    width: 340px;
+    border-radius: 30px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+#origin-input:focus,
+#destination-input:focus {
+    border-color: #4d90fe;
+}
+
+#mode-selector {
+    color: #373637;
+    background-color: #ffdb5d;
+    margin-left: 10px;
+    margin-top: 15px;
+    border-radius: 30px;
+    padding: 5px 11px 0px 11px;
+    width: 165px;
+    text-align: center;
+}
+
+#direction-reset {
+    color: #373637;
+    background-color: #ffdb5d;
+    margin-left: 183px;
+    margin-top: -32px;
+    border-radius: 30px;
+    padding: 5px 11px 0px 11px;
+    width: 165px;
+    text-align: center;
+}
+
+
+#pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+}
+
+.pac-container {
+    width: 100px;
+    z-index: 9999999;
+    top: 10px;
+    left: 10px;
+}
+
+#search-but {
+    margin-right: -5px;
+    background-color: #ffffff;
+    border-radius: 100px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 41px;
+    box-shadow: 1px 1px 5px #373637;
+}
+
+.search-butt {
+    width: 17px;
+    height: 17px;
+}
+
+.lost-but {
+    margin-top: 10px;
+    margin-right: -5px;
+    background-color: #ffffff;
+    text-align: center;
+    border-radius: 100px;
+    width: 35px;
+    height: 35px;
+    box-shadow: 1px 1px 5px #373637;
+    line-height: 43px;
+}
+
+.lost-butt {
+    width: 17px;
+    height: 17px;
+    margin-top: 4px;
+}
+
+.lostcancel-but {
+    margin-top: 10px;
+    margin-right: -5px;
+    background-color: #ffffff;
+    text-align: center;
+    border-radius: 100px;
+    width: 35px;
+    height: 35px;
+    box-shadow: 1px 1px 5px #373637;
+    line-height: 43px;
+}
+
+.lostcancel-butt {
+    width: 17px;
+    height: 17px;
+    margin-top: 4px;
+}
+
+.dog_fbb {
+    background-color: #ffffff;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 47px;
+    border-radius: 100px;
+    box-shadow: 1px 1px 3px #373637;
+    margin-left: 9px;
+    margin-bottom: 13px;
+
+}
+
+.dog_fb {
+    width: 20px;
+    height: 20px;
+}
+
+.person_fbb {
+    background-color: #ffffff;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 47px;
+    border-radius: 100px;
+    box-shadow: 1px 1px 3px #373637;
+    margin-left: 9px;
+    margin-bottom: 13px;
+}
+
+.person_fb {
+    width: 20px;
+    height: 20px;
+}

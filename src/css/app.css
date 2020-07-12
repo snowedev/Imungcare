@@ -1,0 +1,41 @@
+/* iOS Cordova Tweak */
+.device-cordova.device-ios {
+  height: 100vh;
+}
+
+/* Your app custom styles here */
+:root {
+  --f7-sheet-height: 150px;
+  --f7-sheet-border-color: transparent;
+  --f7-sheet-transition-duration: 300ms;
+  --f7-sheet-push-border-radius: 10px;
+  --f7-sheet-push-offset: var(--f7-safe-area-top);
+  --f7-sheet-bg-color: #373637;
+}
+
+:root .theme-dark,
+:root.theme-dark {
+  --f7-sheet-bg-color: #202020;
+}
+
+.md {
+  --f7-dialog-bg-color: #fff;
+  --f7-dialog-text-color: #373637;
+  --f7-dialog-text-align: center;
+  --f7-dialog-border-radius: 20px;
+  --f7-dialog-button-text-color: rgba(255, 219, 93, 0.8);
+  --f7-dialog-font-size: 16px;
+
+}
+
+.panel-custom {
+
+  background: rgb(255, 219, 93);
+  /*background: rgb(55, 53, 55);*/
+}
+
+.panel-custom2 {
+
+  background: rgb(255, 255, 255);
+
+}

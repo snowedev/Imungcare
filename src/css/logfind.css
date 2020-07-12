@@ -1,0 +1,22 @@
+.divfind-butt {
+    width: 200px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.logfind-button {
+    color: #ffdb5d;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#back-icon {
+
+    height: 50px;
+    line-height: 50px;
+}
+
+input[type=placeholder] { /* Firefox, Chrome, Opera */ 
+    color: blue; 
+} 

@@ -1,0 +1,176 @@
+<template>
+  <div class="page" data-name="edit-profile">
+    <div class="navbar">
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <div class="icon icon-back"style="color:#ffdb5d"></div>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">내 정보 변경</div>
+      </div>
+    </div>
+    <div class="page-content">
+      {{#if user}}
+      <form class="list no-hairlines-md profile-form">
+        <ul>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">이름</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="이름" name="name" value="{{user.name}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">전화번호</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="전화번호" name="tel" value="{{user.tel}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">이메일</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="email" placeholder="이메일" name="email" value="{{currentUser.email}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">반려동물이름</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="반려동물이름" name="pet_name" value="{{user.pet_name}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">반려동물생일</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="년/월/일 순으로 기입해주세요" name="pet_birth" value="{{user.pet_birth}}"
+                    required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">반려동물성별</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="남/여" name="pet_gender" value="{{user.pet_gender}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label color-yellow">반려동물의 종</div>
+                <div class="item-input-wrap color-yellow">
+                  <input type="text" placeholder="반려동물의 종" name="pet_species" value="{{user.pet_species}}" required />
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+      <div class="block">
+        <a @click="profile" class="button button-fill button-medium"  style="line-height:42px; height:42px;background-color:#ffdb5d; border-radius:40px;">내 정보 변경</a>
+      </div>
+      {{else}}
+      <div class="block block-strong text-align-center">
+        <div class="preloader"></div>
+      </div>
+      {{/if}}
+    </div>
+</template>
+<script>
+  import $$ from 'dom7';
+
+  export default {
+    data: function () {
+      return {
+        currentUser: firebase.auth().currentUser,
+        user: null,
+      }
+    },
+    methods: {
+      profile: function () {
+        var self = this;
+        var app = self.$app;
+        var formData = app.form.convertToData('.profile-form');
+
+        if (!formData.name) {
+          app.dialog.alert('이름을 입력해주세요.', '아이멍케어');
+        } else if (!formData.tel) {
+          app.dialog.alert('전화번호를 입력해주세요.', '아이멍케어');
+        } else if (!formData.email) {
+          app.dialog.alert('이메일을 입력해주세요.', '아이멍케어');
+        } else if (!formData.pet_name) {
+          app.dialog.alert('반려동물의 이름을 입력해주세요.', '아이멍케어');
+        } else if (!formData.pet_birth) {
+          app.dialog.alert('반려동물의 생일을 입력해주세요.', '아이멍케어');
+        } else if (!formData.pet_gender) {
+          app.dialog.alert('반려동물의 성별을 입력해주세요.', '아이멍케어');
+        } else if (!formData.pet_species) {
+          app.dialog.alert('반려동물의 종을 입력해주세요.', '아이멍케어');
+        } else {
+          app.dialog.preloader();
+
+          db.collection("users").doc(firebase.auth().currentUser.uid).update({
+            name: formData.name,
+            tel: formData.tel,
+            pet_name: formData.pet_name,
+            pet_birth: formData.pet_birth,
+            pet_species: formData.pet_species,
+            pet_gender: formData.pet_gender,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(function () {
+            app.dialog.alert('정보를 수정하였습니다.', '아이멍케어');
+            app.views.main.router.back();
+          }).catch(function (error) {
+            console.error(error);
+          }).finally(function () {
+            app.dialog.close();
+          });
+        }
+      },
+    },
+    on: {
+      pageInit: function (e, page) {
+        var self = this;
+        var app = self.$app;
+
+        // 사용자 정보
+        if (!firebase.auth().currentUser) {
+          app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true,
+          });
+        } else {
+          db.collection("users").doc(firebase.auth().currentUser.uid)
+            .onSnapshot(function (doc) {
+              console.log("Current data: ", doc.data());
+              self.$setState({
+                user: doc.data(),
+              });
+            });
+        }
+      },
+    },
+  };
+</script>
