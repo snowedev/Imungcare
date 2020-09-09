@@ -1,7 +1,7 @@
 # IMUNGCARE  <img src="etc/logo.png" height="70"> 
 
 ### 소개
-- 결과물 구동은 [시연동영상](/etc/아이멍케어_시연동영상.mp4) 참고
+- 결과물 구동은 [시연동영상(Youtube)](https://youtu.be/tYvh1vciRtI) or [다운로드](/etc/아이멍케어_시연동영상.mp4) 참고
 - 교내캡스톤에서 교수님의 추천으로 공학캡스톤디자인 경진대회 출품
 - [아이멍케어 작품 보고서](/etc/작품보고서_아이멍케어.hwp)
 ### 개요
