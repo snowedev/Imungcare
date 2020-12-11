@@ -30,6 +30,8 @@
 - 교내캡스톤에서 교수님의 추천을 받아 공학캡스톤디자인 경진대회에 출품하였습니다!
 - [아이멍케어 작품 보고서](/etc/작품보고서_아이멍케어.hwp)
 
+## 📲 개발환경
+<img src="https://img.shields.io/badge/Cordova-9.0.0-black"> <img src="https://img.shields.io/badge/Framework7-red"> <img src="https://img.shields.io/badge/Firebase Cloud-yellow"> <img src="https://img.shields.io/badge/Google Maps-blue">
 ## 🔥 구현
 |  기능  |  비고   |   이름   |                              
 | :----------: | :----------: | :----------------: |
