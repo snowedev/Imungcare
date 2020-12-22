@@ -38,6 +38,7 @@
 <img src="https://img.shields.io/badge/Firebase Cloud-FFCA28?logo=Firebase&logoColor=white"> <img src="https://img.shields.io/badge/Google Maps-4285F4?logo=Google-Maps&logoColor=white">
 
 ### 🔥 구현
-|  기능  |  비고   |   이름   |                              
+|  기능  |  이름   |   구현   |                              
 | :----------: | :----------: | :----------------: |
-||| 
+|메인뷰,DB,Google Maps API,GPS연동| 이원석 | 🐾 |
+|브랜딩,뷰 디자인,회원가입,로그인| 김수정 | 🐾 |
