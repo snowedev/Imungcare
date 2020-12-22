@@ -34,9 +34,8 @@
 ---
 
 ### 📲 개발환경
-<img src="https://img.shields.io/badge/Cordova-9.0.0-black"> <img src="https://img.shields.io/badge/HTML5-orange"> <img src="https://img.shields.io/badge/CSS-blue"> <img src="https://img.shields.io/badge/JavaScript-yellow">
-
-<img src="https://img.shields.io/badge/Framework7-red"> <img src="https://img.shields.io/badge/Firebase Cloud-yellow"> <img src="https://img.shields.io/badge/Google Maps-blue">
+<img src="https://img.shields.io/badge/Cordova-9.0.0-black?logo=Apache-Cordova&logoColor=E8E8E8"> <img src="https://img.shields.io/badge/HTML5-E34F26?logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=white">  
+<img src="https://img.shields.io/badge/Firebase Cloud-FFCA28?logo=Firebase&logoColor=white"> <img src="https://img.shields.io/badge/Google Maps-4285F4?logo=Google-Maps&logoColor=white">
 
 ### 🔥 구현
 |  기능  |  비고   |   이름   |                              
