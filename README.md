@@ -1,14 +1,14 @@
 # IMUNGCARE  <img src="etc/logo.png" height="70"> 
 
 ### 🐶🐾 아이멍케어?
-> 소중한 우리 반려동물을 키우면서 가장 걱정되는건 옆에서 사라져버릴 때 아닐까요?
-> 나의 반려동물뿐만 아니라 타인의 반려동물까지 찾아줄 수 있는 반려동물의 보호자로서 필요한 서비스가 집약된
+> 소중한 우리 반려동물을 키우면서 가장 걱정되는건 옆에서 사라져버릴 때 아닐까요?  
+> 나의 반려동물뿐만 아니라 타인의 반려동물까지 찾아줄 수 있는 반려동물의 보호자로서 필요한 서비스가 집약된  
 > 저희는 아이멍케어입니다.
 
 
 <img width="100%" src="./etc/Imungcare_simul.gif">
 
----
+
 ### 📌 타 서비스와의 차별점 
 - 한번 잃어버리면 찾기 힘든 유기견을 GPS를 통해 쉽게 추적 가능
 - 애플리케이션을 사용 중인 다른 사용자들이 자신의 반경 내에 있는 유기견 구조 가능
@@ -31,11 +31,11 @@
 - 2019 캡스톤 디자인
 - 교내캡스톤에서 교수님의 추천을 받아 공학캡스톤디자인 경진대회에 출품하였습니다!
 - [아이멍케어 작품 보고서](/etc/작품보고서_아이멍케어.hwp)
----
+
 
 ### 📲 개발환경
-<img src="https://img.shields.io/badge/Cordova-9.0.0-black?logo=Apache-Cordova&logoColor=E8E8E8"> <img src="https://img.shields.io/badge/HTML5-E34F26?logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=white">  
-<img src="https://img.shields.io/badge/Firebase Cloud-FFCA28?logo=Firebase&logoColor=white"> <img src="https://img.shields.io/badge/Google Maps-4285F4?logo=Google-Maps&logoColor=white">
+<img src="https://img.shields.io/badge/Cordova-9.0.0-black?logo=Apache-Cordova&logoColor=E8E8E8"> <img src="https://img.shields.io/badge/HTML5-E34F26?logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=black"> <img src="https://img.shields.io/badge/Firebase Cloud-FFCA28?logo=Firebase&logoColor=black"> <img src="https://img.shields.io/badge/Google Maps-4285F4?logo=Google-Maps&logoColor=white">
+
 
 ### 🔥 구현
 |  기능  |  이름   |   구현   |                              
